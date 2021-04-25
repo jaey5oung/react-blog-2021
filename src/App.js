@@ -3,10 +3,12 @@ import './App.css';
 
 function App() {
   let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동맛집', '파이썬독학']);
-  let [좋아요, 좋아요변경] = useState(0);
+  let [좋아요, 좋아요변경] = useState([]);
   //a에는 남자코트추천이라는 데이터가 들어가있고 b에는 남자코트추천데이터를 변경할수있는 함수가 들어가있다
   //useState 데이터를 특별하게 담는공간
   //state에 데이터를 저장해놓은 이유 state는 변경되면 html이 자동으로 재 랜더링이 되기때문이다
+  let [modal, modal변경] = useState(false);
+  let [누른제목,누른제목변경] =useState(0)
   function 제목바꾸기() {
     var newArray = [...글제목];
     newArray[0] = '여자 코트 추천';
@@ -18,35 +20,47 @@ function App() {
       <div className="black-nav">
         <div>개발 Blog</div>
       </div>
-      <div className="list">
-        <h3>
-          {글제목[0]}{' '}
-          <span
-            onClick={() => {
-              좋아요변경(좋아요++);
-            }}
-          >
-            👍
-          </span>{' '}
-          {좋아요}{' '}
-        </h3>
-        {/* 온클릭에는 클릭될때 실행할 함수 or 그안에서 arrow function으로 직접만들수도잇음 */}
-        <p>4월 발행</p>
-        <button onClick={제목바꾸기}>버튼</button>
-        <hr />
-      </div>
-      <div className="list">
-        <h3>{글제목[1]}</h3>
-        <p>2월 발행</p>
 
-        <hr />
-      </div>
-      <div className="list">
-        <h3>{글제목[2]}</h3>
-        <p>5월 발행 </p>
-        <hr />
-      </div>
+      {글제목.map(function (글 ,i) {
+        return (
+          <div className="list">
+            <h3 onClick={()=>{누른제목변경(i)}}>
+              {글}{' '}
+              <span
+                onClick={() => {
+                  좋아요변경(좋아요++);
+                }}
+              >
+                👍
+              </span>
+              {좋아요}
+            </h3>
+            <p>5월 발행</p>
+            <hr />
+          </div>
+        );
+      })}
+    
+      <button
+        onClick={() => {
+          modal변경(!modal);
+        }}
+      >
+        모달창 열기
+      </button>
+      {modal === true ? <Modal 성남={글제목} 서울={누른제목}/> : null}
     </div>
+  );
+}
+function Modal(props) {
+  return (
+    <>
+      <div className="modal">
+        <h2>{props.성남[props.서울]}</h2>
+        <p>날짜</p>
+        <p>상세내용</p>
+      </div>
+    </>
   );
 }
 
